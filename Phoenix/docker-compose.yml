@@ -1,0 +1,9 @@
+web:
+  build: .
+  command: iex -S mix phoenix.server
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app
+  ports:
+    - "4000:4000"

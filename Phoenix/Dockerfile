@@ -15,10 +15,10 @@ WORKDIR /Downloads
 
 RUN wget http://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
 RUN apt-key add erlang_solutions.asc
-RUN apt-get update && apt-get -y install elixir && mkdir /app
+RUN apt-get update && apt-get -y install elixir && apt-get install erlang-base-hipe && mkdir /app
 
 COPY mix.exs /app/mix.exs
 
 WORKDIR /app
 
-RUN git clone https://github.com/phoenixframework/phoenix.git && cd phoenix && git checkout v0.13.1 && mix do local.hex --force, local.rebar, deps.get, compile
+RUN git clone https://github.com/phoenixframework/phoenix.git && cd phoenix && git checkout v1.0 && mix do local.hex --force, local.rebar, deps.get, compile

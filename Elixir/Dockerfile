@@ -18,6 +18,7 @@ RUN wget http://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
 RUN apt-key add erlang_solutions.asc
 RUN apt-get update && \
     apt-get -y install erlang && \
+    apt-get -y install erlang-base-hipe && \
     apt-get -y install elixir && \
     mkdir /app
 

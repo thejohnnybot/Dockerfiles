@@ -1,9 +1,11 @@
 web:
   build: .
-  command: iex -S mix phoenix.server
-  stdin_open: true
-  tty: true
-  volumes:
-    - .:/app
+  environment:
+    DATABASE_URL: ecto://postgres:postgres@db/access_io
+  links:
+    - db
   ports:
-    - "4000:4000"
+    - 4000:4000
+
+db:
+  image: postgres

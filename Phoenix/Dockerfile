@@ -1,27 +1,31 @@
-FROM ubuntu:15.04
-MAINTAINER Johnny Mejias jmejias17@gmail.com
+FROM ubuntu:14.04
 
-RUN locale-gen en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+MAINTAINER Johnny Mejias <jmejias17@gmail.com>
 
-RUN apt-get update && apt-get -y install wget curl
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -q && \
+    apt-get -y install curl locales && \
+    locale-gen "en_US.UTF-8" && \
+    export LANG=en_US.UTF-8 && \
+    curl -o /tmp/erlang.deb http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
+    dpkg -i /tmp/erlang.deb && \
+    rm -rf /tmp/erlang.deb && \
+    apt-get update -q && \
+    apt-get install -y build-essential && \ 
+    apt-get install -y erlang-base=1:18.2 erlang-dev=1:18.2 erlang-eunit=1:18.2 erlang-parsetools=1:18.2 erlang-xmerl=1:18.2 elixir=1.1.1-2 && \
+    apt-get clean -y && \
+    rm -rf /var/cache/apt/*
 
-RUN echo "deb http://packages.erlang-solutions.com/ubuntu vivid contrib" >> /etc/apt/sources.list
+ENV LANG=en_US.UTF-8
 
-RUN mkdir /Downloads
-WORKDIR /Downloads
+RUN mix local.hex --force && \
+    mix local.rebar --force
 
-RUN wget http://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
-RUN apt-key add erlang_solutions.asc
-RUN apt-get update && \
-    apt-get -y install elixir && \
-    apt-get install erlang-base-hipe && \
-    mkdir /app
+COPY . /usr/src/app
+WORKDIR /usr/src/app
 
-COPY mix.exs /app/mix.exs
+RUN mix do deps.get, compile
 
-WORKDIR /app
+EXPOSE 4000
 
-RUN git clone https://github.com/phoenixframework/phoenix.git && cd phoenix && git checkout v1.0 && mix do local.hex --force, local.rebar, deps.get, compile
+CMD ["mix", "phoenix.server"]

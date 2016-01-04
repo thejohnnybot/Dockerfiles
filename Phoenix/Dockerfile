@@ -11,7 +11,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     dpkg -i /tmp/erlang.deb && \
     rm -rf /tmp/erlang.deb && \
     apt-get update -q && \
-    apt-get install -y build-essential && \ 
+    apt-get install -y build-essential postgresql-client && \ 
     apt-get install -y erlang-base=1:18.2 erlang-dev=1:18.2 erlang-eunit=1:18.2 erlang-parsetools=1:18.2 erlang-xmerl=1:18.2 elixir=1.1.1-2 && \
     apt-get clean -y && \
     rm -rf /var/cache/apt/*

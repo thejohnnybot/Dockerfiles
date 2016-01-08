@@ -1,11 +1,11 @@
 web:
   build: .
   environment:
-    DATABASE_URL: ecto://postgres:postgres@db/access_io
+    DATABASE_URL: ecto://postgres:postgres@db/db_here
   links:
     - db
   ports:
     - 4000:4000
 
 db:
-  image: postgres
+  image: kiasaki/alpine-postgres
